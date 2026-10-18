@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>系列 · 白墙</title>
+<meta name="description" content="摄影作品系列。">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23faf9f7'/><rect x='7' y='9' width='18' height='14' fill='none' stroke='%2317161a' stroke-width='1'/></svg>">
+</head>
+<body data-page="series">
+
+<header class="site-head">
+  <div class="wrap inner">
+    <a class="brand" href="index.html">
+      白墙
+      <small id="brandSub">PHOTOGRAPHY</small>
+    </a>
+    <nav class="head-nav">
+      <a href="index.html">← 回到展厅</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap series-hero">
+    <a class="back-link" href="index.html"><span>←</span> 全部系列</a>
+    <h1 id="seriesTitle">系列</h1>
+    <p class="sub" id="seriesSub"></p>
+    <p class="desc" id="seriesDesc"></p>
+  </section>
+
+  <section class="wrap">
+    <div class="photo-grid" id="photoGrid"></div>
+  </section>
+</main>
+
+<footer class="wrap site-foot">
+  <span id="footLeft">白墙 · 摄影作品展</span>
+  <span id="footRight"></span>
+</footer>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="bar">
+    <span class="idx" id="lbIdx"></span>
+    <div class="tools">
+      <button class="icon-btn" id="lbClose" type="button">关闭 ESC</button>
+    </div>
+  </div>
+  <div class="stage">
+    <button class="nav-arrow prev" id="lbPrev" type="button" aria-label="上一张">‹</button>
+    <img id="lbImg" alt="">
+    <button class="nav-arrow next" id="lbNext" type="button" aria-label="下一张">›</button>
+  </div>
+  <div class="foot">
+    <div>
+      <h3 id="lbTitle"></h3>
+      <p id="lbCaption"></p>
+    </div>
+    <span class="label" id="lbSize"></span>
+  </div>
+</div>
+
+<script>window.WW_STATIC = true;</script>
+<script src="assets/gallery.js"></script>
+</body>
+</html>

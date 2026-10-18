@@ -1,65 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="探索中国古镇与传统聚落：交互地图、地区筛选、文化专题与中英双语导览。">
-<meta name="theme-color" content="#182b27">
-<title>中国古镇图鉴 · China Historic Towns Atlas</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>
-:root{--ink:#1e302b;--green:#233b32;--paper:#f4f0e7;--gold:#c8a96b;--muted:#7b837b;--line:#ded8ca}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input{font:inherit}button{cursor:pointer}
-.app{height:100vh;display:grid;grid-template-columns:370px 1fr;overflow:hidden}.sidebar{background:var(--green);color:#f8f4e9;display:flex;flex-direction:column;z-index:500;min-width:0;box-shadow:5px 0 28px #15251d20}
-.brand{padding:24px 22px 18px;border-bottom:1px solid #ffffff1c;background:linear-gradient(135deg,#29483a,#182c26)}.kicker{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#d8c49a}.brand h1{font-family:Georgia,"Noto Serif SC",serif;font-size:25px;line-height:1.2;font-weight:500;margin:9px 0 5px;letter-spacing:.04em}.en-title{font-family:Georgia,serif;color:#d6c7a4;font-size:14px}.brand p{font-size:11px;line-height:1.7;color:#d0d7ce;margin:12px 0 0}
-.toolbar{padding:13px 16px 9px;border-bottom:1px solid #ffffff18}.search{width:100%;padding:11px 13px;border-radius:9px;border:1px solid #ffffff2b;background:#ffffff10;color:white;outline:none;font-size:12px}.search::placeholder{color:#c2ccc3}.search:focus{border-color:#d7bf87;background:#ffffff17}
-.section{padding:11px 16px;border-bottom:1px solid #ffffff18}.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;font-size:10px;letter-spacing:.08em;color:#d4c39d;text-transform:uppercase}.chips{display:flex;flex-wrap:wrap;gap:5px}.chip{border:1px solid #ffffff30;background:#ffffff0b;color:#edf0e9;border-radius:20px;padding:6px 8px;font-size:10px;transition:.2s}.chip:hover{border-color:#d4c39d}.chip.active{background:#d0b579;color:#1d3028;border-color:#d0b579}.small-action{border:0;background:transparent;color:#d6c7a4;font-size:10px;padding:2px}
-.list-head{padding:11px 18px 6px;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#bfcac0}.town-list{overflow:auto;flex:1;padding:0 9px 12px}.town{border:1px solid transparent;border-radius:9px;padding:11px;margin:3px 0;cursor:pointer;transition:.18s}.town:hover{background:#ffffff0b}.town.active{background:#ffffff12;border-color:#c6ac70}.town-name{font-family:Georgia,"Noto Serif SC",serif;font-size:14px;line-height:1.4}.town-meta{font-size:10px;color:#b8c5ba;margin-top:4px}.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}.tag{font-size:9px;padding:3px 6px;border-radius:4px;background:#ffffff12;color:#e2d3ad}.empty{padding:25px 14px;text-align:center;color:#bfcac0;font-size:12px}.footer{padding:10px 16px;background:#152720;font-size:9px;color:#aab9ad;line-height:1.5}
-.map-wrap{position:relative;min-width:0}#map{position:absolute;inset:0;background:#e8e4d8}.leaflet-container{font-family:inherit}.map-top{position:absolute;z-index:400;top:17px;left:17px;right:17px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;pointer-events:none}.map-title,.map-actions{pointer-events:auto;background:#fffdf2ed;backdrop-filter:blur(10px);box-shadow:0 5px 24px #1d2c2418;border:1px solid #e6dfd1;border-radius:10px}.map-title{padding:12px 15px}.map-title strong{font-family:Georgia,serif;font-weight:500;font-size:15px}.map-title small{display:block;font-size:10px;color:#777e75;margin-top:4px}.map-actions{padding:5px;display:flex;gap:4px}.action{border:0;border-radius:6px;background:transparent;color:#34473d;padding:8px 10px;font-size:10px}.action:hover{background:#e9e0cd}.action.primary{background:#243d32;color:white}.mobile-toggle{display:none}.notice{position:absolute;bottom:17px;left:17px;z-index:400;max-width:340px;background:#fffdf2ed;border:1px solid #e6dfd1;border-radius:8px;padding:9px 12px;color:#777d72;font-size:10px;line-height:1.6}
-.leaflet-popup-content-wrapper{border-radius:10px;padding:0;overflow:hidden}.leaflet-popup-content{margin:0!important;width:285px!important}.popup{font-size:12px;color:#344139}.popup-head{padding:14px 16px;color:white}.popup-head h3{font-family:Georgia,serif;font-size:18px;font-weight:500;margin:0 0 5px}.popup-head div{font-size:10px;color:#f0e9d9}.popup-content{padding:12px 15px}.popup-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid #eee9df}.popup-row span:first-child{color:#81877e}.popup-desc{line-height:1.75;margin-top:8px;color:#535a51}.popup-label{font-size:9px;color:#8a7850;text-transform:uppercase;letter-spacing:.08em;margin-top:11px}.legend{background:#fffdf2;padding:10px 12px;border-radius:8px;box-shadow:0 3px 15px #0002;font-size:10px;line-height:1.8}.legend b{display:block;margin-bottom:4px;font-size:11px}
-@media(max-width:850px){.app{grid-template-columns:320px 1fr}.brand{padding:20px 17px}.brand h1{font-size:22px}.section{padding:10px 13px}.toolbar{padding:11px 13px 8px}}
-@media(max-width:640px){.app{display:block;height:100dvh}.sidebar{position:absolute;top:0;bottom:0;left:0;width:min(88vw,355px);transform:translateX(-102%);transition:transform .25s;box-shadow:8px 0 30px #0003}.sidebar.open{transform:translateX(0)}.map-wrap{position:absolute;inset:0}.mobile-toggle{display:block;position:absolute;z-index:450;top:15px;left:14px;background:#233b32;color:white;border:0;border-radius:8px;padding:10px 12px;box-shadow:0 3px 15px #0002;font-size:11px}.map-top{top:63px;left:10px;right:10px}.map-title{max-width:60%;padding:9px 10px}.map-title strong{font-size:12px}.map-title small{font-size:9px}.map-actions{padding:3px}.action{padding:8px 7px;font-size:10px}.notice{left:10px;bottom:10px;right:10px;max-width:none}.leaflet-popup-content{width:260px!important}}
-</style></head>
-<body><div class="app">
-<aside class="sidebar" id="sidebar">
-<header class="brand"><div class="kicker" data-i18n="kicker">文化地图 · 数字图鉴</div><h1 data-i18n="title">中国古镇图鉴</h1><div class="en-title">China Historic Towns Atlas</div><p data-i18n="subtitle">沿着古道、河流与城墙，发现中国传统聚落的多样面貌。</p></header>
-<div class="toolbar"><input id="search" class="search" data-placeholder="search" placeholder="搜索古镇、省份或城市…"></div>
-<section class="section"><div class="section-head"><span data-i18n="regions">地区筛选</span><button class="small-action" id="resetRegions" data-i18n="all">全部</button></div><div class="chips" id="regionFilters"></div></section>
-<section class="section"><div class="section-head"><span data-i18n="topics">文化专题</span><button class="small-action" id="resetTopics" data-i18n="clear">清除</button></div><div class="chips" id="topicFilters"></div></section>
-<div class="list-head"><span data-i18n="directory">古镇名录</span><span id="count"></span></div><div class="town-list" id="townList"></div>
-<div class="footer" data-i18n="sourceNote">资料基于原始名录整理；历史信息建议进一步核验。</div>
-</aside>
-<main class="map-wrap"><button class="mobile-toggle" id="mobileToggle" data-i18n="browse">☰ 浏览名录</button><div class="map-top"><div class="map-title"><strong data-i18n="mapTitle">中国传统聚落地图</strong><small data-i18n="mapSubtitle">选择地图标记，查看古镇档案</small></div><div class="map-actions"><button class="action primary" id="langToggle">EN</button><button class="action" id="showAll" data-i18n="showAll">显示全部</button></div></div><div id="map" aria-label="Interactive map of historic towns in China"></div><div class="notice" data-i18n="mapNotice">地图底图 © OpenStreetMap contributors。标记位置沿用原始文件坐标，可能存在误差。</div></main>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="./data.js"></script>
-<script>
-const sourceData=window.ATLAS_DATA, townsData=sourceData.towns, regionColors=sourceData.regions, topicsConfig=sourceData.topics;
-const regionEN={"华北地区":"North China","华东地区":"East China","华中地区":"Central China","华南地区":"South China","西南地区":"Southwest China","西北地区":"Northwest China","青藏高原与边疆地区":"Tibetan Plateau & Borderlands"};
-const topicEN={"江南水乡":"Jiangnan Water Towns","茶马古道":"Tea Horse Road","徽派古村":"Huizhou Villages","晋商大院":"Shanxi Merchant Compounds","巴蜀古镇":"Bashu Towns","边陲古镇":"Frontier Settlements","丝路古城":"Silk Road Cities","运河古镇":"Canal Towns","军事要塞":"Military Strongholds","红色古镇":"Revolutionary Heritage"};
-const ui={zh:{kicker:"文化地图 · 数字图鉴",title:"中国古镇图鉴",subtitle:"沿着古道、河流与城墙，发现中国传统聚落的多样面貌。",search:"搜索古镇、省份或城市…",regions:"地区筛选",topics:"文化专题",all:"全部",clear:"清除",directory:"古镇名录",sourceNote:"名录与中文简介取自原始文件；位置与历史信息可能需要进一步核验。",browse:"☰ 浏览名录",mapTitle:"中国传统聚落地图",mapSubtitle:"选择地图标记，查看古镇档案",showAll:"显示全部",mapNotice:"地图底图 © OpenStreetMap contributors。标记位置沿用原始文件坐标，可能存在误差。",province:"省份",city:"城市 / 区县",coordinates:"坐标",englishSummary:"English overview",source:"原始中文简介",shown:"显示",of:"座古镇",none:"没有符合条件的古镇",region:"地区"},en:{kicker:"CULTURAL MAP · DIGITAL ATLAS",title:"China Historic Towns Atlas",subtitle:"Explore traditional settlements shaped by ancient roads, rivers and city walls.",search:"Search town, province or city…",regions:"REGION FILTERS",topics:"CULTURAL THEMES",all:"All",clear:"Clear",directory:"TOWN DIRECTORY",sourceNote:"Names and Chinese descriptions are from the source file; coordinates and historical details may require verification.",browse:"☰ Browse towns",mapTitle:"Traditional Settlements of China",mapSubtitle:"Select a marker to explore a town profile",showAll:"Show all",mapNotice:"Basemap © OpenStreetMap contributors. Marker coordinates are inherited from the source file and may be approximate.",province:"Province",city:"City / district",coordinates:"Coordinates",englishSummary:"English overview",source:"Original Chinese description",shown:"Showing",of:"towns",none:"No towns match your filters",region:"Region"}};
-let lang="zh",activeRegions=new Set(Object.keys(regionColors)),activeTopics=new Set(),searchQuery="",markers={};
-const $=id=>document.getElementById(id);
-const map=L.map("map",{center:[35,105],zoom:4,minZoom:3,maxZoom:18,zoomControl:false});
-L.control.zoom({position:"bottomright"}).addTo(map);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
-function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-const topicLabel=t=>lang==="en"?(topicEN[t]||t):t,regionLabel=r=>lang==="en"?(regionEN[r]||r):r;
-function summary(t){const first=t.topics[0];const en={"江南水乡":"A waterside settlement associated with canals, bridges and the vernacular architecture of the Jiangnan region.","茶马古道":"A historic stop associated with overland trade routes and the exchange of goods and cultures.","徽派古村":"A traditional village associated with Huizhou-style architecture, ancestral halls and decorative arts.","晋商大院":"A place connected with Shanxi merchant culture, historic commerce and traditional courtyard compounds.","巴蜀古镇":"A historic settlement in the Bashu cultural region, known for local architecture and folk traditions.","边陲古镇":"A frontier settlement shaped by cultural exchange among communities in China's borderlands.","丝路古城":"A historic place associated with the Silk Road and long-distance cultural exchange.","运河古镇":"A town shaped by canal transport, trade, docks and the movement of people and goods.","军事要塞":"A settlement with a historic military or defensive role, often associated with walls, passes or strategic routes.","红色古镇":"A place associated with modern revolutionary history and related heritage."};if(lang==="en")return en[first]||("A historic settlement in "+t.province+". See the original Chinese description below for the source's specific details.");return t.desc}
-function topicTags(t){return t.topics.map(x=>`<span class="tag">${safe(topicsConfig[x]?.icon||"")} ${safe(topicLabel(x))}</span>`).join("")}
-function popup(t){const color=regionColors[t.region]||"#536b5b";return `<article class="popup"><header class="popup-head" style="background:${color}"><h3>${safe(t.name)}</h3><div>${safe(regionLabel(t.region))} · ${safe(t.province)}</div><div style="margin-top:8px">${topicTags(t)}</div></header><div class="popup-content"><div class="popup-row"><span>${ui[lang].province}</span><b>${safe(t.province)}</b></div><div class="popup-row"><span>${ui[lang].city}</span><b>${safe(t.city)}</b></div><div class="popup-row"><span>${ui[lang].coordinates}</span><b>${t.lat.toFixed(2)}, ${t.lng.toFixed(2)}</b></div><div class="popup-label">${ui[lang].englishSummary}</div><div class="popup-desc">${safe(summary(t))}</div><div class="popup-label">${ui[lang].source}</div><div class="popup-desc">${safe(t.desc)}</div></div></article>`}
-function markerIcon(t){let color=regionColors[t.region]||"#777";for(const topic of t.topics){if(activeTopics.has(topic)){color=topicsConfig[topic]?.color||color;break}}return L.divIcon({className:"",html:`<div style="width:17px;height:17px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${color};border:2px solid white;box-shadow:0 2px 6px #0005"></div>`,iconSize:[18,18],iconAnchor:[9,18]})}
-townsData.forEach(t=>{const marker=L.marker([t.lat,t.lng],{icon:markerIcon(t)});marker.bindPopup(popup(t),{maxWidth:310});marker.on("click",()=>highlight(t.name));markers[t.name]=marker;marker.addTo(map)});
-function visible(t){return activeRegions.has(t.region)&&(!searchQuery||[t.name,t.province,t.city,t.region].some(x=>x.toLowerCase().includes(searchQuery.toLowerCase())))&&(!activeTopics.size||t.topics.some(x=>activeTopics.has(x)))}
-function render(){const filtered=townsData.filter(visible);$("townList").innerHTML=filtered.length?filtered.map(t=>`<div class="town" data-name="${safe(t.name)}" tabindex="0" role="button"><div class="town-name">${safe(t.name)}</div><div class="town-meta">${safe(t.province)} · ${safe(t.city)} · ${safe(regionLabel(t.region))}</div><div class="tags">${topicTags(t)}</div></div>`).join(""):`<div class="empty">${ui[lang].none}</div>`;$("count").textContent=`${ui[lang].shown} ${filtered.length} / ${townsData.length} ${ui[lang].of}`;document.querySelectorAll(".town").forEach(el=>{const go=()=>focusTown(el.dataset.name);el.addEventListener("click",go);el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}})});townsData.forEach(t=>{const m=markers[t.name];if(visible(t)){if(!map.hasLayer(m))m.addTo(map);m.setIcon(markerIcon(t));m.setPopupContent(popup(t))}else if(map.hasLayer(m))map.removeLayer(m)})}
-function highlight(name){document.querySelectorAll(".town").forEach(el=>el.classList.toggle("active",el.dataset.name===name))}
-function focusTown(name){const t=townsData.find(x=>x.name===name);if(!t)return;map.flyTo([t.lat,t.lng],Math.max(map.getZoom(),8),{duration:.5});markers[name].openPopup();highlight(name);if(innerWidth<=640)$("sidebar").classList.remove("open")}
-function renderFilters(){$("regionFilters").innerHTML=Object.entries(regionColors).map(([r,c])=>`<button class="chip ${activeRegions.has(r)?"active":""}" data-region="${safe(r)}">${safe(regionLabel(r))}</button>`).join("");$("topicFilters").innerHTML=Object.entries(topicsConfig).map(([t,c])=>`<button class="chip ${activeTopics.has(t)?"active":""}" data-topic="${safe(t)}">${c.icon} ${safe(topicLabel(t))}</button>`).join("");document.querySelectorAll("[data-region]").forEach(b=>b.onclick=()=>{const r=b.dataset.region;activeRegions.has(r)?activeRegions.delete(r):activeRegions.add(r);renderFilters();render()});document.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{const t=b.dataset.topic;activeTopics.has(t)?activeTopics.delete(t):activeTopics.add(t);renderFilters();render()})}
-function setLanguage(next){lang=next;document.documentElement.lang=lang==="zh"?"zh-CN":"en";document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.dataset.i18n;if(ui[lang][k])el.textContent=ui[lang][k]});$("search").placeholder=ui[lang].search;$("langToggle").textContent=lang==="zh"?"EN":"中文";renderFilters();render()}
-$("search").addEventListener("input",e=>{searchQuery=e.target.value.trim();render()});
-$("resetRegions").onclick=()=>{activeRegions=new Set(Object.keys(regionColors));renderFilters();render()};
-$("resetTopics").onclick=()=>{activeTopics.clear();renderFilters();render()};
-$("langToggle").onclick=()=>setLanguage(lang==="zh"?"en":"zh");
-$("showAll").onclick=()=>{activeRegions=new Set(Object.keys(regionColors));activeTopics.clear();searchQuery="";$("search").value="";renderFilters();render();map.fitBounds(L.latLngBounds(townsData.map(t=>[t.lat,t.lng])),{padding:[35,35]})};
-$("mobileToggle").onclick=()=>$("sidebar").classList.toggle("open");
-const legend=L.control({position:"bottomright"});legend.onAdd=()=>{const d=L.DomUtil.create("div","legend");d.innerHTML="<b>"+(lang==="zh"?"地区图例":"Regional legend")+"</b>"+Object.entries(regionColors).map(([r,c])=>`<div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${c};margin-right:6px"></span>${safe(regionLabel(r))}</div>`).join("");return d};legend.addTo(map);
-renderFilters();render();window.addEventListener("resize",()=>map.invalidateSize());setTimeout(()=>map.invalidateSize(),100);
-</script></body></html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>白墙 · 摄影作品展</title>
+<meta name="description" content="一个安静的摄影作品展。">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23faf9f7'/><rect x='7' y='9' width='18' height='14' fill='none' stroke='%2317161a' stroke-width='1'/></svg>">
+</head>
+<body data-page="index">
+
+<header class="site-head">
+  <div class="wrap inner">
+    <a class="brand" href="index.html">
+      白墙
+      <small id="brandSub">PHOTOGRAPHY</small>
+    </a>
+    <nav class="head-nav">
+      <a href="#wall">系列</a>
+      <a href="#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div class="kicker"><span class="label" id="heroKicker">展 览</span></div>
+    <h1 id="heroTitle">白墙</h1>
+    <p class="sub" id="heroSub">摄影作品展</p>
+    <p class="intro" id="heroIntro"></p>
+
+    <div class="hero-meta">
+      <div><span class="n" id="statSeries">—</span><span class="k">系列</span></div>
+      <div><span class="n" id="statPhotos">—</span><span class="k">作品</span></div>
+      <div><span class="n" id="statYear">—</span><span class="k">年份</span></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="wall">
+    <div class="section-head">
+      <h2>系列</h2>
+      <span class="label" id="wallHint">&nbsp;</span>
+    </div>
+    <div class="series-grid" id="seriesGrid"></div>
+  </section>
+
+  <section class="wrap" id="about" style="padding-bottom:clamp(70px,10vw,120px)">
+    <div class="section-head"><h2>关于</h2></div>
+    <p class="intro" id="aboutText" style="max-width:640px;margin:0;color:var(--ink-2);font-size:14px;line-height:2.05;white-space:pre-line"></p>
+  </section>
+</main>
+
+<footer class="wrap site-foot">
+  <span id="footLeft">白墙 · 摄影作品展</span>
+  <span id="footRight"></span>
+</footer>
+
+<script>window.WW_STATIC = true;</script>
+<script src="assets/gallery.js"></script>
+</body>
+</html>
